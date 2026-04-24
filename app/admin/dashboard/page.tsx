@@ -49,9 +49,7 @@ export default function AdminPage() {
   useEffect(() => {
     const fetchData = async () => {
       const userSnap = await getDocs(collection(db, "users"));
-      const salesSnap = await getDocs(collection(db, "sales"));
       setUsers(userSnap.docs.map((docw) => docw.data()));
-      setSales(salesSnap.docs.map((docw) => docw.data()));
     };
     fetchData();
   }, []);
@@ -159,15 +157,21 @@ export default function AdminPage() {
             <table className="min-w-full border text-left">
               <thead className="bg-gray-200">
                 <tr>
-                  <th className="p-3">Nama</th>
+               
+                  <th className="p-3">Username</th>
                   <th className="p-3">Email</th>
+                  <th className="p-3">Rekening</th>
+                  <th className="p-3">Whatsap</th>
                 </tr>
               </thead>
               <tbody>
                 {users.map((user, i) => (
                   <tr key={i} className="border-t hover:bg-gray-50">
-                    <td className="p-3">{user.name}</td>
+                 
+                    <td className="p-3">{user.username}</td>
                     <td className="p-3">{user.email}</td>
+                    <td className="p-3">{user.rekening}</td>
+                    <td className="p-3">{user.whatsapp}</td>
                   </tr>
                 ))}
               </tbody>
@@ -242,7 +246,7 @@ export default function AdminPage() {
             </tbody>
           </table>
         </section>
-        <section className="bg-white p-6 rounded-xl shadow text-gray-800">
+        {/* <section className="bg-white p-6 rounded-xl shadow text-gray-800">
           <h2 className="text-2xl font-semibold mb-4">📦 Produk Terjual</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full border text-left">
@@ -264,7 +268,7 @@ export default function AdminPage() {
               </tbody>
             </table>
           </div>
-        </section>
+        </section> */}
 
         <section className="bg-white p-6 rounded-xl shadow text-gray-800">
           <h2 className="text-2xl font-semibold mb-4">Withdraw Member</h2>

@@ -17,14 +17,16 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [lihatPassword, setLihatPassword] = useState(false); // toggle password
+ 
+ 
   const handleLogin = async () => {
     setLoading(true);
     setError("");
-if (!username || !password) {
-  setError("Username dan password harus diisi.");
-  setLoading(false);
-  return;
-}
+    if (!username || !password) {
+      setError("Username dan password harus diisi.");
+      setLoading(false);
+      return;
+    }
 
     try {
       // 1. Ambil dokumen user dengan username
@@ -43,7 +45,7 @@ if (!username || !password) {
 
       // 2. Login dengan email yang ditemukan
       await signInWithEmailAndPassword(auth, email, password);
-      router.replace("/dashboard");
+      router.replace("/HomeCourse");
     } catch (err) {
       console.error("Login error:", err);
 
@@ -78,13 +80,13 @@ if (!username || !password) {
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md space-y-7">
         <div className="flex flex-col items-center mb-6">
           <Image
-            src="/images/loading.jpeg"
+            src="/images/loadinsg.jpeg"
             alt="ASB Family Logo"
             width={100}
             height={100}
             className="rounded-full object-cover mb-4 shadow-md"
           />
-          <h2 className="text-3xl font-extrabold text-red-700">ASB Family</h2>
+          <h2 className="text-3xl font-extrabold text-orange-700">Quantum bootcamp</h2>
           <p className="text-gray-600 mt-1">Masuk untuk melanjutkan</p>
         </div>
 
@@ -102,27 +104,27 @@ if (!username || !password) {
 
         <div>
           <label htmlFor="password" className="block text-gray-700 text-sm font-semibold mb-2">Password</label>
-        <div className="relative w-full">
-      <input
-        id="password"
-        type={lihatPassword ? "text" : "password"}
-        className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none bg-white"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Masukkan password Anda"
-      />
-  <button
-        type="button"
-        onClick={() => setLihatPassword(!lihatPassword)}
-        className="absolute right-4 top-5 mt-2 -translate-y-1/2 text-gray-500"
-      >
-        {lihatPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-      </button>
-    </div>
+          <div className="relative w-full">
+            <input
+              id="password"
+              type={lihatPassword ? "text" : "password"}
+              className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none bg-white"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Masukkan password Anda"
+            />
+            <button
+              type="button"
+              onClick={() => setLihatPassword(!lihatPassword)}
+              className="absolute right-4 top-5 mt-2 -translate-y-1/2 text-gray-500"
+            >
+              {lihatPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
+          </div>
         </div>
 
         {error && (
-          <p className="text-red-700 text-sm bg-red-100 p-3 rounded-lg border border-red-300 text-center font-medium">
+          <p className="text-orange-700 text-sm bg-orange-100 p-3 rounded-lg border border-orange-300 text-center font-medium">
             {error}
           </p>
         )}
@@ -130,17 +132,17 @@ if (!username || !password) {
         <button
           onClick={handleLogin}
           disabled={loading}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
+          className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50"
         >
           {loading ? "Memuat..." : "Login"}
         </button>
-
+        {/* 
         <div className="text-center text-gray-700 text-sm mt-6">
           Belum punya akun?{" "}
-          <Link href="/singup" className="text-red-600 font-semibold hover:underline">
+          <Link href="/singup" className="text-orange-600 font-semibold hover:underline">
             Daftar sekarang
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

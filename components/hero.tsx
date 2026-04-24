@@ -11,7 +11,7 @@ const HeroSection: React.FC = () => {
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/hero.jpg"
+          src="/images/12.jpg"
           alt="ASB Family Background"
           fill
           className="object-cover brightness-50"
@@ -20,20 +20,20 @@ const HeroSection: React.FC = () => {
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black/80 z-0" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/50 z-0" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-3xl">
         <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-          Bersama ASB, Menuju{" "}
-          <span className="text-yellow-400">Hidup Sehat & Sukses</span>
+       Kupas Tuntas Crypto, Trading, 
+          <span className="text-orange-400">dan Blockchain</span>
         </h1>
         <p className="text-lg md:text-xl mb-8 text-gray-200">
-          Sukses bersama, sehat bersama, ASB pilihan kita.
+        Start Crypto. Go Advanced
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link href="/login">
-            <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-xl shadow-lg">
+            <Button size="lg" className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-xl shadow-lg">
               Login Sekarang <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>

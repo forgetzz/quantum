@@ -6,19 +6,19 @@ import { FaUsers, FaCheckCircle, FaSmileBeam } from "react-icons/fa"; // Changed
 function Pengguna() {
   const stats = [
     {
-      label: "Mitra Bergabung",
+      label: "Siswa kami",
       value: 1230,
       icon: <FaUsers size={30} className="text-red-600 mr-2" />, // Icon next to text
       suffix: "", // No suffix for this stat
     },
     {
-      label: "Produk Terjual",
-      value: 890,
+      label: "Jumlah Module",
+      value: 90,
       icon: <FaCheckCircle size={30} className="text-red-600 mr-2" />, // Icon next to text
       suffix: "", // No suffix for this stat
     },
     {
-      label: "Kepuasan Pelanggan",
+      label: "Kepuasan Siswa Kami",
       value: 98,
       icon: <FaSmileBeam size={30} className="text-red-600 mr-2" />, // Icon next to text
       suffix: "%", // Added percentage suffix

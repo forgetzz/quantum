@@ -17,19 +17,18 @@ export default function Navbar() {
   }, [pathname]);
 
   const menuLinks = [
-    { label: "Beranda", href: "#features" },
-    { label: "Tentang Kami", href: "#features" },
-    { label: "Produk", href: "#produk" },
-    { label: "Kemitraan", href: "#halo" },
-    { label: "Kontak", href: "#contact" },
+    { label: "Beranda", href: "#" },
+    { label: "Tentang Kami", href: "#tentangKami" },
+    { label: "Price list", href: "#kemitraan" },
+    { label: "Kontak", href: "#kontak" },
   ];
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white shadow-sm dark:bg-black/90 dark:border-red-400">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold text-red-600">
-          ASBFamily
+        <Link href="/" className="text-xl font-bold text-orange-600">
+      Quantum Bootcamp
         </Link>
 
         {/* Desktop Menu */}

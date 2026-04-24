@@ -3,12 +3,12 @@ import Image from "next/image";
 
 export default function SejarahKami() {
   return (
-    <div className="w-full">
+    <div id="tentangKami" className="w-full">
       {/* Hero Section */}
-      <div className="bg-red-600 text-white py-10 px-6 text-center">
-        <h1 className="text-3xl font-bold">Tentang PT AUTO SUKSES BERJAMAAH</h1>
+      <div className="bg-orange-600 text-white py-10 px-6 text-center">
+        <h1 className="text-3xl font-bold">Tentang Quantum Bootcamp</h1>
         <p className="text-lg mt-2">
-          Membangun kesehatan dan kesejahteraan bersama
+          Membangun Pendidikan yang bersifat egaliter
         </p>
       </div>
 
@@ -18,8 +18,8 @@ export default function SejarahKami() {
 
         <div className="relative w-full md:w-1/3 aspect-video px-1">
           <Image
-            src="/images/logo123.png"
-            alt="ASB Family Background"
+            src="/images/logo12s3.png"
+            alt="Quantum Background"
             fill
             className="object-full rounded"
             priority
@@ -30,15 +30,7 @@ export default function SejarahKami() {
         {/* Teks */}
         <div className="w-full md:w-1/2 text-black">
           <p className="text-justify">
-            AUTO SUKSES BERJAMAAH (ASB) adalah sebuah komunitas yang dibangun di
-            atas fondasi semangat kebersamaan untuk mencapai kesuksesan bersama.
-            Kami percaya bahwa kesuksesan sejati tidak hanya diukur dari
-            pencapaian finansial, tetapi juga dari kemampuan untuk bertumbuh,
-            saling mendukung, dan menciptakan dampak positif. Melalui model
-            bisnis yang inklusif dan produk-produk herbal berkualitas, ASB
-            membuka pintu bagi siapa saja yang ingin meraih impian, meningkatkan
-            kesejahteraan, dan menjadi bagian dari keluarga besar yang solid dan
-            inspiratif.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit quibusdam laboriosam fuga enim quidem beatae debitis. Ab earum, ad temporibus magni molestias atque cumque nam numquam id dolorem illo modi pariatur mollitia aperiam iusto ullam aliquid cupiditate amet maiores natus voluptatibus porro. Tempore veniam assumenda ex ipsa fuga voluptates corrupti, iusto debitis! Ipsam, id quasi! Nisi molestias accusamus accusantium, blanditiis deserunt pariatur numquam quod sunt minus excepturi harum veritatis laudantium architecto doloremque, aperiam dolor tenetur quia doloribus velit aut distinctio obcaecati perspiciatis! Tempora illo unde adipisci rem corrupti enim cumque ipsum hic! Vel et, vero aspernatur magni nesciunt consequatur porro eligendi quisquam corporis eum. Hic, perspiciatis quo quibusdam deserunt debitis consequatur facere non aliquam doloremque eveniet tenetur quia explicabo cumque dolorem repellat reiciendis ducimus, impedit adipisci nihil est illum illo!
           </p>
         </div>
       </div>

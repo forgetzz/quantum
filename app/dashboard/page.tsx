@@ -60,7 +60,7 @@ interface dataProfile {
   name: string;
   email: string;
   uid: string;
-  imageProfile: string
+  imageProfile: string;
 }
 export default function BottomNav() {
   const { activeTab, setActiveTab } = useTabStore();
@@ -91,7 +91,7 @@ export default function BottomNav() {
 
         const data = docSnap.data() as dataProfile;
         setProfile(data);
-        console.log("Data berhasil diambil:", data);
+
       } catch (error) {
         console.error("Gagal mengambil data:", error);
         alert("Terjadi kesalahan saat mengambil data.");
@@ -149,8 +149,8 @@ export default function BottomNav() {
         return <Riwayatropribadi />;
       case "RiwayatPin":
         return <RiwayatPin />;
-        case "RIwayatWD": 
-        return <RiwayatPenarikan/>
+      case "RIwayatWD":
+        return <RiwayatPenarikan />;
 
       default:
         return null;
@@ -159,7 +159,7 @@ export default function BottomNav() {
 
   const navItems = [
     { key: "jaringan", icon: <Network size={22} /> },
-    { key: "home", icon: <Home size={22} /> },
+    { key: "home", icon: <div className="bg-red-500 p-2 text-white rounded-full"><Home size={22} /></div>  },
     { key: "produk", icon: <UserRoundPlus size={22} /> },
     { key: "settings", icon: <User size={22} /> },
   ] as const;
@@ -192,14 +192,13 @@ export default function BottomNav() {
           </div>
 
           {/* Avatar / Logo */}
-         <img
-  src={profile?.imageProfile} // fallback jika kosong
-  alt="Avatar"
-  width={40} // ukuran lebih pas
-  height={40}
-  className="rounded-full border border-gray-300 shadow-sm object-cover"
-/>
-
+          <img
+            src={profile?.imageProfile} // fallback jika kosong
+            alt="Avatar"
+            width={40} // ukuran lebih pas
+            height={40}
+            className="rounded-full border border-gray-300 shadow-sm object-cover"
+          />
         </div>
       </div>
       <main className="flex-1">{renderContent()}</main>
@@ -504,11 +503,11 @@ export default function BottomNav() {
         </SheetContent>
 
         {/* Bottom Navigation */}
-        <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-lg px-6 py-2 flex justify-between gap-4 w-[90%] max-w-md z-50">
+        <nav className="fixed bottom-4 left-1/2 -translate-x-1/2 bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl shadow-lg px-8 py-4 flex justify-between gap-8 w-[100%] max-w-md z-50">
           {/* Hamburger */}
           <button
             onClick={() => setOpen(true)}
-            className="p-2 rounded-full transition-all duration-200 hover:bg-red-500 text-gray-500"
+            className="p-2 rounded-full transition-all duration-200 text-gray-500"
           >
             <AlignJustify size={22} />
           </button>
@@ -518,8 +517,8 @@ export default function BottomNav() {
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`p-2 rounded-full transition-all duration-200 hover:bg-red-500 ${
-                activeTab === key ? "bg-red-500 text-white" : "text-gray-500"
+              className={`p-2 rounded-full transition-all duration-200 ${
+                activeTab === key ? " " : "text-gray-500"
               }`}
             >
               {icon}

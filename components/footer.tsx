@@ -5,12 +5,12 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-br from-[#7b1b1b] to-[#a94442] text-white pt-12 pb-6 mt-16 shadow-inner shadow-black/30">
+    <footer id="kontak" className="bg-gradient-to-br from-[#fb8200] to-[#8f5503] text-white pt-12 pb-6 mt-16 shadow-inner shadow-black/0">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10">
         {/* Logo & Deskripsi */}
         <div className="space-y-3">
           <Image
-            src="/images/logo123.jpeg"
+            src="/images/logo12a3.jpeg"
             alt="Teh ASB"
             width={200}
             height={200}
@@ -18,8 +18,7 @@ export default function Footer() {
             priority
           />
           <p className="text-sm text-gray-100">
-            PT. Auto Sukses Berjamaah. Membangun Kesehatan dan Kesejahteraan
-            Bersama.
+            Quantum Bootcamp
           </p>
         </div>
 
@@ -32,16 +31,9 @@ export default function Footer() {
             <li className="flex items-center gap-2">
               <FaWhatsapp className="text-green-400" />
 
-              <a href="https://wa.link/ajnx61">Fachira: 087723776111</a>
+              <a href="https://wa.link/ajnx61"> 087723776111</a>
             </li>
-            <li className="flex items-center gap-2">
-              <FaWhatsapp className="text-green-400" />
-              <a href="https://wa.link/gaue50">Baby: 085777982292</a>
-            </li>
-            <li className="flex items-center gap-2">
-              <FaWhatsapp className="text-green-400" />
-              <a href="https://wa.link/z2tflg">Ade: 085122475755</a>
-            </li>
+         
           </ul>
         </div>
 
@@ -52,7 +44,7 @@ export default function Footer() {
             Alamat Kami
           </h3>
           <p className="text-sm text-gray-100">
-            Pettuadae, Kec. Turikale, Kabupaten Maros, Sulawesi Selatan 90516
+            Makassar, sulawesi selatan , indonesia
           </p>
           <div className="rounded-xl overflow-hidden border border-white/30 shadow-md">
             <iframe
@@ -71,16 +63,16 @@ export default function Footer() {
         <div className="space-y-3">
           <h3 className="text-xl font-semibold">🚀 Visi Kami</h3>
           <p className="text-sm italic text-gray-100">
-            Sukses bersama, sehat bersama.
+            Belajar bersama tim kami
           </p>
         </div>
       </div>
 
       {/* Footer bottom */}
-     <p className="border-t border-white/20 mt-10 pt-4 text-center text-sm text-gray-200">
-  © {new Date().getFullYear()}{" "}
-  <strong className="text-white">ASB Family</strong>. All rights reserved.
-</p>
+      <p className="border-t border-white/20 mt-10 pt-4 text-center text-sm text-gray-200">
+        © {new Date().getFullYear()}{" "}
+        <strong className="text-white">Quantum Bootcamp</strong>. All rights reserved.
+      </p>
 
     </footer>
   );

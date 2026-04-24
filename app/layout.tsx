@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "./global.css";
 import RotatingImage from "@/components/loadingPage";
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -13,10 +13,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Asbfamily",
+  title: "Quantum Bootcamp",
   description: "sehat bersama",
     icons: {
-    icon: "/images/loading.png", // atau /favicon.png
+    icon: "/images/loadinag.png", // atau /favicon.png
   },
 };
 
@@ -26,11 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html>
   <head>
         {/* Favicon manual */}
         <link rel="icon" href="/images/loading.png" type="image/png" />
-        <title>Asbfamily</title>
+        <title>Quantum Bootcamp</title>
       </head>
 
       <body className="bg-base-100 text-base-content min-h-screen">

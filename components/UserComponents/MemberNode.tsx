@@ -165,27 +165,27 @@ export default function NetworkPage() {
   );
 }
 
-function UserTree({ node, isRoot }: { node: UserNode; isRoot?: boolean }) {
-  return (
-    <div className="flex flex-col items-center">
-      <UserCard user={node} isRoot={isRoot} />
+// function UserTree({ node, isRoot }: { node: UserNode; isRoot?: boolean }) {
+//   return (
+//     <div className="flex flex-col items-center">
+//       <UserCard user={node} isRoot={isRoot} />
 
-      {node.children.length > 0 && (
-        <div className="mt-4 flex flex-col items-center gap-4">
-          {[...node.children]
-            .sort(
-              (a, b) =>
-                new Date(a.createdAt).getTime() -
-                new Date(b.createdAt).getTime()
-            )
-            .map((child) => (
-              <UserTree key={child.id} node={child} />
-            ))}
-        </div>
-      )}
-    </div>
-  );
-}
+//       {node.children.length > 0 && (
+//         <div className="mt-4 flex flex-col items-center gap-4">
+//           {[...node.children]
+//             .sort(
+//               (a, b) =>
+//                 new Date(a.createdAt).getTime() -
+//                 new Date(b.createdAt).getTime()
+//             )
+//             .map((child) => (
+//               <UserTree key={child.id} node={child} />
+//             ))}
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
 
 function UserCard({ user, isRoot }: { user: UserNode; isRoot?: boolean }) {
   return (
