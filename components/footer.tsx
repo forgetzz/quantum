@@ -47,7 +47,7 @@ export default function Footer() {
             Makassar, sulawesi selatan , indonesia
           </p>
           <div className="rounded-xl overflow-hidden border border-white/30 shadow-md">
-            <iframe
+            {/* <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3974.5517336929215!2d119.57309347362144!3d-5.013841751059025!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dbef9000f277701%3A0x6a7e9e3143107bb6!2sASB%20MAROS!5e0!3m2!1sid!2sid!4v1753995710257!5m2!1sid!2sid"
               width="100%"
               height="180"
@@ -55,7 +55,7 @@ export default function Footer() {
               loading="lazy"
               allowFullScreen
               referrerPolicy="no-referrer-when-downgrade"
-            />
+            /> */}
           </div>
         </div>
 
