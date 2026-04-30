@@ -114,7 +114,7 @@ export default function MitraRegisterPage() {
         return;
       }
 
-      // 2️⃣ Setelah validasi sukses, buat akun Auth
+
       const authInstance = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
         authInstance,
@@ -125,7 +125,7 @@ export default function MitraRegisterPage() {
       const user = userCredential.user;
       const token = await user.getIdToken();
 
-      // 3️⃣ Kirim data ke backend untuk simpan ke Firestore
+   
       const saveResponse = await fetch(
         "https://backend-asb-production.up.railway.app/register",
         {
@@ -168,16 +168,16 @@ export default function MitraRegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-white to-gray-500">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md space-y-6 transform transition-all duration-300 ">
+      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md space-y-6 transform transition-all duration-300 mb-10">
         <div className="flex flex-col items-center justify-center mb-6">
           <Image
-            src="/images/loading.jpeg"
+            src="/images/12.png"
             alt="ASB Family Logo"
             width={100}
             height={100}
             className="rounded-full object-cover mb-4 shadow-md"
           />
-          <h2 className="text-3xl font-extrabold text-center text-red-700">
+          <h2 className="text-3xl font-extrabold text-center text-orange-700">
             Formulir Pendaftaran Mitra Baru
           </h2>
           <p className="text-gray-600/40 text-center mt-1">
@@ -195,7 +195,7 @@ export default function MitraRegisterPage() {
           </label>
           <input
             id="name"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="name"
             placeholder="Masukkan nama lengkap Anda"
             onChange={handleChange}
@@ -214,7 +214,7 @@ export default function MitraRegisterPage() {
           </label>
           <input
             id="email"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="email"
             type="email"
             placeholder="Masukkan email aktif Anda"
@@ -232,7 +232,7 @@ export default function MitraRegisterPage() {
           </label>
           <input
             id="username"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="username"
             type="username"
             placeholder="Masukkan kode ASB_000 angka anda"
@@ -250,7 +250,7 @@ export default function MitraRegisterPage() {
           </label>
           <input
             id="whatsapp"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="whatsapp"
             type="numeric"
             placeholder="0896364730"
@@ -271,7 +271,7 @@ export default function MitraRegisterPage() {
           <div>
           <input
             id="password"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="password"
             type={lihatPassword ? "text" : "password"}
             placeholder="Minimal 6 karakter"
@@ -317,7 +317,7 @@ export default function MitraRegisterPage() {
           </label>
           <input
             id="rekening"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="rekening"
             placeholder="Contoh: BCA 1234567890"
             onChange={handleChange}
@@ -336,7 +336,7 @@ export default function MitraRegisterPage() {
           </label>
           <input
             id="sponsorUsername"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="sponsorUsername"
             placeholder="Jika ada, pisahkan dengan koma jika lebih dari satu"
             onChange={handleChange}
@@ -350,22 +350,22 @@ export default function MitraRegisterPage() {
 
         {/* Input PIN */}
         {/* Informasi PIN Aktivasi (otomatis) */}
-        <div>
+        {/* <div>
           <div>
              <p className="text-xs text-gray-500 mt-1">
             Periksa pin aktivasi anda terlebih dahulu
           </p>
           </div>
           {error?.toLowerCase().includes("pin") && (
-            <p className="text-sm text-red-600 bg-red-100 p-3 rounded-md border border-red-300">
+            <p className="text-sm text-orange-600 bg-orange-100 p-3 rounded-md border border-orange-300">
               {error}
             </p>
           )}
-        </div>
+        </div> */}
 
         {/* Pesan Status (Error/Success) */}
         {error && (
-          <p className="text-red-700 text-sm bg-red-100 p-3 rounded-lg border border-red-300 text-center font-medium">
+          <p className="text-orange-700 text-sm bg-orange-100 p-3 rounded-lg border border-orange-300 text-center font-medium">
             {error}
           </p>
         )}
@@ -379,7 +379,7 @@ export default function MitraRegisterPage() {
         <button
           onClick={handleRegister}
           disabled={loading}
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
+          className="w-full bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-lg"
         >
           {loading ? "Mendaftar..." : "Daftar Sekarang"}
         </button>
@@ -389,7 +389,7 @@ export default function MitraRegisterPage() {
           Sudah punya akun?{" "}
           <Link
             href={"/login"}
-            className="text-red-600 hover:text-red-800 font-semibold hover:underline transition-colors duration-200"
+            className="text-orange-600 hover:text-orange-800 font-semibold hover:underline transition-colors duration-200"
           >
             Login di sini
           </Link>

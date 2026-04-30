@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./global.css";
-import RotatingImage from "@/components/loadingPage";
+import GlobalLoading from "@/components/loadingPage";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -34,7 +35,7 @@ export default function RootLayout({
       </head>
 
       <body className="bg-base-100 text-base-content min-h-screen">
-        <RotatingImage />
+   <GlobalLoading/>
         {children}
       </body>
     </html>

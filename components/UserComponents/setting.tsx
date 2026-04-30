@@ -3,8 +3,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { Camera, Pencil, Save, X } from "lucide-react";
+import { Camera, Key, Pencil, Save, X } from "lucide-react";
 import { signOut } from "firebase/auth";
+import { Label } from "@radix-ui/react-dropdown-menu";
 
 const SUPABASE_PROJECT_URL = "https://yredbkgnngcgzfagnwah.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyZWRia2dubmdjZ3pmYWdud2FoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MDU2NjEsImV4cCI6MjA2NjM4MTY2MX0.72ogqDzn1QPTqiYkhbb4PLe7PRpZcFmzqJ9IL6203Fs"; // Pindahkan ini ke env jika production
@@ -18,6 +19,7 @@ interface UserData {
   rekening: string;
   whatsapp: string;
   imageProfile: string;
+  addressEVM: string
 }
 
 export default function ProfilePage() {
@@ -30,6 +32,7 @@ export default function ProfilePage() {
     rekening: "",
     whatsapp: "",
     imageProfile: "",
+    addressEVM: "",
   });
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UserData>(userData);
@@ -126,25 +129,15 @@ export default function ProfilePage() {
       <div className="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl p-8">
         <div className="text-center mb-8">
           <div className="relative w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-red-400 shadow-md">
-            {userData.imageProfile ? (
-              <img
-                src={userData.imageProfile}
-                alt="Foto Profil"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm bg-gray-100">
-                Tidak ada foto
-              </div>
-            )}
-
+            <img src="/images/12.png" alt="" />
+            {/* 
             <button
               onClick={triggerFileInput}
               className="absolute bottom-0 z-50 right-5 bg-white p-1.5 rounded-full shadow -mb-2 -mr-2 hover:bg-gray-100"
               aria-label="Upload Foto"
             >
               <Camera className="w-10 h-10 text-red-500" />
-            </button>
+            </button> */}
 
             <input
               type="file"
@@ -163,12 +156,12 @@ export default function ProfilePage() {
           {[
             { label: "Nama", key: "name" },
             { label: "Referensi", key: "sponsorUsername" },
-
             { label: "Bank", key: "bank" },
             { label: "No Rekening", key: "rekening" },
             { label: "Nomor WhatsApp", key: "whatsapp" },
-          ].map((field) => (
-            <div key={field.key}>
+            { label: "address", Key: "addressEVM" },
+          ].map((field, k) => (
+            <div key={k}>
               <span className="font-semibold">{field.label}:</span>{" "}
               {isEditing ? (
                 <input

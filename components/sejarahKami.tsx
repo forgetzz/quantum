@@ -18,7 +18,7 @@ export default function SejarahKami() {
 
         <div className="relative w-full md:w-1/3 aspect-video px-1">
           <Image
-            src="/images/logo12s3.png"
+            src="/images/12.png"
             alt="Quantum Background"
             fill
             className="object-full rounded"

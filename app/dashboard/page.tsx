@@ -2,165 +2,83 @@
 import {
   Sheet,
   SheetContent,
-  SheetTrigger,
   SheetTitle,
-  SheetClose,
-  SheetDescription,
+
 } from "@/components/ui/sheet";
 import {
-  ListCollapse,
+
   Network,
   Home,
   NotebookPen,
   User,
-  UserRound,
   UserRoundPlus,
-  Gem,
   LayoutDashboard,
-  AlignCenterIcon,
   AlignJustify,
-  Wallet,
   Bell,
   Award,
-  Users,
-  NotebookIcon,
+  Book,
 } from "lucide-react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-import Jaringan from "@/components/UserComponents/jaringan";
-import ProductList from "@/components/UserComponents/produk";
-import AccountSettings from "@/components/UserComponents/setting";
+
 import { useTabStore } from "@/store/tabStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
-import DaftarMitra from "@/components/UserComponents/DaftarMitra";
-import Image from "next/image";
 
 import { getDoc, getFirestore, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import OrderPIN from "@/components/UserComponents/OrderPIn";
-import StockPin from "@/components/UserComponents/StockPin";
-import AktivasiRO from "@/components/UserComponents/aktivasiRo";
-import TransferPin from "@/components/UserComponents/transferPIn";
-import FinanceDashboard from "@/components/UserComponents/finance";
-import BonusBelumDitarik from "@/components/UserComponents/BonusBelumDitarik";
-import Manajemenbonus from "@/components/UserComponents/ManajmeneBonus";
-import Bonusrewardperingkat from "@/components/UserComponents/RewardPeringkat";
-import BonusRewardUtama from "@/components/UserComponents/bonusrewardutama";
-import Daftarreseller from "@/components/UserComponents/DaftarReseller";
-import Rewardreseller from "@/components/UserComponents/RewardReseller.tsx";
-import Inputpenjualanreseller from "@/components/UserComponents/inputpenjualanreseller";
-import Home2 from "@/components/UserComponents/home";
-import Riwayatropribadi from "@/components/UserComponents/riwayatropribadi";
-import RiwayatPin from "@/components/UserComponents/RIwayatPIn";
-import RiwayatPenarikan from "@/components/UserComponents/RiwayatPenarikan";
-
+import { TabKey } from "@/lib/Tabkey";
+import { tabStrategies } from "@/lib/Tabkey";
 interface dataProfile {
   name: string;
   email: string;
   uid: string;
   imageProfile: string;
 }
+
 export default function BottomNav() {
   const { activeTab, setActiveTab } = useTabStore();
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const [openNested, setOpenNested] = useState(false);
-  const [openNested2, setOpenNested2] = useState(false);
-  const [openNested3, setOpenNested3] = useState(false);
-  const [openNested4, setOpenNested4] = useState(false);
-  const [openNested5, setOpenNested5] = useState(false);
+
   const [profile, setProfile] = useState<dataProfile>();
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
-      if (!user) {
-        // alert("Anda belum login");
+useEffect(() => {
+  const unsubscribe = onAuthStateChanged(getAuth(), async (user) => {
+    if (!user) {
+      router.replace("/login");
+      return;
+    }
+
+    try {
+      const docRef = doc(db, "users", user.uid);
+      const docSnap = await getDoc(docRef);
+
+      if (!docSnap.exists()) {
+        console.log("Data user tidak ditemukan");
         return;
       }
 
-      try {
-        const docRef = doc(db, "users", user.uid);
-        const docSnap = await getDoc(docRef);
+      const data = docSnap.data() as dataProfile;
+      console.log("DATA:", data); // 🔥 debug penting
+      setProfile(data);
 
-        if (!docSnap.exists()) {
-          // alert("Data anda tidak ada");
-          return;
-        }
-
-        const data = docSnap.data() as dataProfile;
-        setProfile(data);
-
-      } catch (error) {
-        console.error("Gagal mengambil data:", error);
-        alert("Terjadi kesalahan saat mengambil data.");
-      }
-    });
-
-    return () => unsubscribe(); // Cleanup listener saat komponen unmount
-  }, []);
-
-  useEffect(() => {
-    const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        router.replace("/login");
-      }
-    });
-    return () => unsubscribe();
-  }, [router]);
-
-  const renderContent = () => {
-    switch (activeTab) {
-      case "home":
-        return <Home2 />;
-      case "jaringan":
-        return <Jaringan />;
-      case "produk":
-        return <DaftarMitra />;
-      case "settings":
-        return <AccountSettings />;
-      case "OrderPIN":
-        return <OrderPIN />;
-      case "StockPIN":
-        return <StockPin />;
-      case "aktivasiRO":
-        return <AktivasiRO />;
-      case "TransferPin":
-        return <TransferPin />;
-      case "Withdraw":
-        return <FinanceDashboard />;
-      case "TotalBonus":
-        return <BonusBelumDitarik />;
-      case "ManajemenBonus":
-        return <Manajemenbonus />;
-      case "RewardPeringkat":
-        return <Bonusrewardperingkat />;
-      case "RewardUtama":
-        return <BonusRewardUtama />;
-      case "DaftarReseller":
-        return <Daftarreseller />;
-      case "RewardReseller":
-        return <Rewardreseller />;
-      case "InputReseller":
-        return <Inputpenjualanreseller />;
-      case "RiwayatRO":
-        return <Riwayatropribadi />;
-      case "RiwayatPin":
-        return <RiwayatPin />;
-      case "RIwayatWD":
-        return <RiwayatPenarikan />;
-
-      default:
-        return null;
+    } catch (error) {
+      console.error("Error:", error);
     }
-  };
+  });
+
+  return () => unsubscribe();
+}, [router]);
+
+const renderContent = (activeTab: TabKey) => {
+  return tabStrategies[activeTab];
+};
 
   const navItems = [
     { key: "jaringan", icon: <Network size={22} /> },
-    { key: "home", icon: <div className="bg-red-500 p-2 text-white rounded-full"><Home size={22} /></div>  },
-    { key: "produk", icon: <UserRoundPlus size={22} /> },
+    { key: "home", icon: <div className="bg-orange-500 p-2 text-white rounded-full"><Home size={22} /></div> },
+    { key: "Module", icon: <Book size={22} /> },
     { key: "settings", icon: <User size={22} /> },
   ] as const;
   const now = new Date();
@@ -173,7 +91,7 @@ export default function BottomNav() {
 
   return (
     <div className="flex flex-col min-h-fit bg-gray-50">
-      <div className="flex justify-between items-center bg-gradient-to-r from-red-500 via-red-600 to-red-700 rounded-b-lg px-4 py-3 text-white shadow-md">
+      <div className="flex justify-between items-center bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700 rounded-b-lg px-4 py-3 text-white shadow-md">
         {/* Kiri: Hari + Halo */}
         <div>
           <p className="text-xs capitalize opacity-90">{hariSekarang}</p>
@@ -192,22 +110,22 @@ export default function BottomNav() {
           </div>
 
           {/* Avatar / Logo */}
-          <img
+          {/* <img
             src={profile?.imageProfile} // fallback jika kosong
             alt="Avatar"
             width={40} // ukuran lebih pas
             height={40}
             className="rounded-full border border-gray-300 shadow-sm object-cover"
-          />
+          /> */}
         </div>
       </div>
-      <main className="flex-1">{renderContent()}</main>
+      <main className="flex-1">{renderContent(activeTab)}</main>
 
       {/* Side menu with Sheet */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="left"
-          className="w-64 bg-[#800000] text-white p-0 h-screen overflow-y-auto  scrollbar-none"
+          className="w-64 bg-[#865b30] text-white p-0 h-screen overflow-y-auto  scrollbar-none"
         >
           <div className="p-4 ">
             <SheetTitle className="text-lg flex justify-center border-b-2 pb-4 border-white text-white items-center font-bold mb-4">
@@ -223,7 +141,7 @@ export default function BottomNav() {
               <LayoutDashboard size={18} />
               Dashboard
             </button>
-            <button
+            {/* <button
               className="w-full flex items-center gap-2 px-2 py-2 hover:bg-white/10 rounded mt-2"
               onClick={() => {
                 setActiveTab("ManajemenBonus");
@@ -232,89 +150,18 @@ export default function BottomNav() {
             >
               <Wallet size={18} />
               Manajemen Bonus
-            </button>
+            </button> */}
 
             {/* MAnajamene pin */}
-            <div>
-              {/* Menu lainnya */}
 
-              {/* Parent item with toggle */}
-              <button
-                onClick={() => setOpenNested((prev) => !prev)}
-                className="w-full flex items-center justify-between text-left px-2 py-2 hover:bg-white/10 rounded"
-              >
-                <span className="flex items-center gap-2">
-                  <Gem size={18} />
-                  <span>Manajemen PIN </span>
-                </span>
-                {openNested ? (
-                  <ChevronDown size={18} />
-                ) : (
-                  <ChevronRight size={18} />
-                )}
-              </button>
 
-              {/* Children (nested items) */}
-              {openNested && (
-                <div className="ml-6 mt-1 space-y-1">
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("OrderPIN");
-                      setOpen(false);
-                    }}
-                  >
-                    Order PIN
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("StockPIN");
-                    }}
-                  >
-                    Stock PIN
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("TransferPin");
-                    }}
-                  >
-                    Transfer PIN
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("aktivasiRO");
-                    }}
-                  >
-                    Aktivasi PIN RO
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("RiwayatPin");
-                    }}
-                  >
-                    Riwayat PIN
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("RiwayatRO");
-                    }}
-                  >
-                    Riwayat RO pribadi
-                  </button>
-                </div>
-              )}
-            </div>
+
             {/* penakan bonsu section  */}
             <div>
               {/* Menu lainnya */}
 
               {/* Parent item with toggle */}
-              <button
+              {/* <button
                 onClick={() => setOpenNested2((prev) => !prev)}
                 className="w-full flex items-center justify-between text-left px-2 py-2 hover:bg-white/10 rounded"
               >
@@ -327,10 +174,10 @@ export default function BottomNav() {
                 ) : (
                   <ChevronRight size={18} />
                 )}
-              </button>
+              </button> */}
 
               {/* Children (nested items) */}
-              {openNested2 && (
+              {/* {openNested2 && (
                 <div className="ml-6 mt-1 space-y-1">
                   <button
                     className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
@@ -358,83 +205,70 @@ export default function BottomNav() {
                     Status Penarikan
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
             {/* Nested Menu Example */}
             <div>
               {/* Parent item with toggle */}
               <button
-                onClick={() => setOpenNested3((prev) => !prev)}
+                onClick={() => {
+                  setActiveTab("jaringan");
+                  setOpen(false);
+                }}
                 className="w-full flex items-center justify-between text-left px-2 py-2 hover:bg-white/10 rounded"
               >
                 <span className="flex items-center gap-2">
                   <Network size={18} />
-                  <span>Jaringan</span>
+                  <span>Affiliate</span>
                 </span>
-                {openNested ? (
-                  <ChevronDown size={18} />
-                ) : (
-                  <ChevronRight size={18} />
-                )}
+
               </button>
 
               {/* Children (nested items) */}
-              {openNested3 && (
-                <div className="ml-6 mt-1 space-y-1">
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("jaringan");
-                      setOpen(false);
-                    }}
-                  >
-                    Diagram Jaringan
-                  </button>
-                </div>
-              )}
+
             </div>
             {/* Reward */}
             <div>
               {/* Parent item with toggle */}
               <button
-                onClick={() => setOpenNested4((prev) => !prev)}
+                onClick={() => {
+                  setActiveTab("RewardPeringkat");
+                  setOpen(false);
+                }}
                 className="w-full flex items-center justify-between text-left px-2 py-2 hover:bg-white/10 rounded"
               >
                 <span className="flex items-center gap-2">
                   <Award size={18} />
                   <span>Reward</span>
                 </span>
-                {openNested4 ? (
-                  <ChevronDown size={18} />
-                ) : (
-                  <ChevronRight size={18} />
-                )}
+
               </button>
 
               {/* Children (nested items) */}
-              {openNested4 && (
-                <div className="ml-6 mt-1 space-y-1">
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("RewardUtama");
-                      setOpen(false);
-                    }}
-                  >
-                    Bonus Reward Utama
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("RewardPeringkat");
-                      setOpen(false);
-                    }}
-                  >
-                    Bonus Reward Peringkat
-                  </button>
-                </div>
-              )}
+
             </div>
+
+
+            {/* Module fiur */}
+
+            <div>
+              <button
+                onClick={() => {
+                  setActiveTab("Module");
+                  setOpen(false);
+                }}
+                className="w-full flex items-center justify-between text-left px-2 py-2 hover:bg-white/10 rounded"
+              >
+                <span className="flex items-center gap-2">
+                  <Book size={18} />
+                  <span> Module Kelas</span>
+                </span>
+
+              </button>
+            </div>
+            {/* Module fiur */}
+
+
             {/* Daftar Mitra baru */}
             <div>
               <button
@@ -453,7 +287,7 @@ export default function BottomNav() {
               {/* Menu lainnya */}
 
               {/* Parent item with toggle */}
-              <button
+              {/* <button
                 onClick={() => setOpenNested5((prev) => !prev)}
                 className="w-full flex items-center justify-between text-left px-2 py-2 hover:bg-white/10 rounded"
               >
@@ -466,38 +300,10 @@ export default function BottomNav() {
                 ) : (
                   <ChevronRight size={18} />
                 )}
-              </button>
+              </button> */}
 
               {/* Children (nested items) */}
-              {openNested5 && (
-                <div className="ml-6 mt-1 space-y-1">
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("DaftarReseller");
-                      setOpen(false);
-                    }}
-                  >
-                    Daftar Reseller
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("InputReseller");
-                    }}
-                  >
-                    Input Penjualan
-                  </button>
-                  <button
-                    className="block text-sm px-2 py-1 hover:bg-white/10 rounded w-full text-left"
-                    onClick={() => {
-                      setActiveTab("RewardReseller");
-                    }}
-                  >
-                    Reward Reseller
-                  </button>
-                </div>
-              )}
+
             </div>
           </div>
         </SheetContent>
@@ -517,9 +323,8 @@ export default function BottomNav() {
             <button
               key={key}
               onClick={() => setActiveTab(key)}
-              className={`p-2 rounded-full transition-all duration-200 ${
-                activeTab === key ? " " : "text-gray-500"
-              }`}
+              className={`p-2 rounded-full transition-all duration-200 ${activeTab === key ? " " : "text-gray-500"
+                }`}
             >
               {icon}
             </button>

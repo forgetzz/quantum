@@ -6,7 +6,6 @@ import { auth } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
 import { getDocs, query, where, collection } from "firebase/firestore";
 import { db } from "@/lib/firebase"; // pastikan ini benar
-import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 
@@ -45,7 +44,7 @@ export default function LoginPage() {
 
       // 2. Login dengan email yang ditemukan
       await signInWithEmailAndPassword(auth, email, password);
-      router.replace("/HomeCourse");
+      router.replace("/dashboard");
     } catch (err) {
       console.error("Login error:", err);
 
@@ -80,7 +79,7 @@ export default function LoginPage() {
       <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md space-y-7">
         <div className="flex flex-col items-center mb-6">
           <Image
-            src="/images/loadinsg.jpeg"
+            src="/images/12.png"
             alt="ASB Family Logo"
             width={100}
             height={100}

@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Logo & Deskripsi */}
         <div className="space-y-3">
           <Image
-            src="/images/logo12a3.jpeg"
+            src="/images/12.png"
             alt="Teh ASB"
             width={200}
             height={200}

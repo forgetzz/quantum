@@ -59,72 +59,77 @@ export function SokidList() {
        Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui officia porro error saepe molestias tenetur officiis dolores quidem illo optio?
         </p>
       </div>
-      <div className=" grid gap-8 md:grid-cols-3 py-10">
-      {sokidPackages.map((pkg, i) => (
+    <div className="grid gap-8 md:grid-cols-3 py-10">
+  {sokidPackages.map((pkg, i) => (
+    <div
+      key={i}
+      className={cn(
+        " relative rounded-xl border-2 p-8 shadow-xl transition-all min-h-[420px] flex flex-col justify-between hover:scale-[1.02] hover:shadow-gold/50",
+        pkg.badge === "EKSCLUSIF" &&
+          "border-yellow-400 bg-orange-500 text-white",
+        pkg.badge === "REKOMENDASI" && "border-orange-600",
+        !pkg.badge && "border-muted bg-white"
+      )}
+    >
+      {pkg.badge && (
         <div
-          key={i}
           className={cn(
-            "relative rounded-xl border-2 p-6 shadow-xl transition-all hover:scale-[1.02] hover:shadow-gold/50",
-            pkg.badge === "EKSCLUSIF" &&
-              "border-yellow-400 bg-orange-500 text-white",
-            pkg.badge === "REKOMENDASI" && "border-orange-600",
-            !pkg.badge && "border-muted bg-white"
+            "absolute top-4 right-4 text-xs font-semibold px-2 py-1 rounded-full",
+            pkg.badge === "EKSCLUSIF" && "bg-yellow-400 text-black",
+            pkg.badge === "REKOMENDASI" && "bg-orange-600 text-white"
           )}
         >
-          {pkg.badge && (
-            <div
-              className={cn(
-                "absolute top-4 right-4 text-xs font-semibold px-2 py-1 rounded-full",
-                pkg.badge === "EKSCLUSIF" && "bg-yellow-400 text-black",
-                pkg.badge === "REKOMENDASI" && "bg-orange-600 text-white"
-              )}
-            >
-              {pkg.badge}
-            </div>
+          {pkg.badge}
+        </div>
+      )}
+
+      <div className="py-10">
+        <h2 className="text-5xl font-bold mb-2">{pkg.title}</h2>
+        <p className="text-xl opacity-80 mb-4">{pkg.description}</p>
+
+        <div
+          className={cn(
+            "text-4xl font-extrabold mb-6",
+            pkg.badge === "EKSCLUSIF" && "text-yellow-400"
           )}
+        >
+          {pkg.price}
+        </div>
 
-          <h2 className="text-2xl font-bold mb-1">{pkg.title}</h2>
-          <p className="text-sm opacity-80 mb-4">{pkg.description}</p>
-          <div
-            className={cn(
-              "text-3xl font-extrabold mb-6",
-              pkg.badge === "EKSCLUSIF" && "text-yellow-400"
-            )}
-          >
-            {pkg.price}
-          </div>
+        <ul className="mb-6 space-y-2 text-2xl">
+          {pkg.benefits.map((item, idx) => (
+            <li key={idx} className="flex items-center">
+              <CheckCircle
+                className={cn(
+                  "w-5 h-5 mr-2",
+                  pkg.badge === "EKSCLUSIF"
+                    ? "text-yellow-400"
+                    : "text-green-500"
+                )}
+              />
+              {item}
+            </li>
+          ))}
+        </ul>
 
-          <ul className="mb-6 space-y-2 text-sm">
-            {pkg.benefits.map((item, idx) => (
-              <li key={idx} className="flex items-center">
-                <CheckCircle
-                  className={cn(
-                    "w-4 h-4 mr-2",
-                    pkg.badge === "EKSCLUSIF"
-                      ? "text-yellow-400"
-                      : "text-green-500"
-                  )}
-                />
-                {item}
-              </li>
-            ))}
-          </ul>
 
           <Button
-            className={cn(
-              "w-full text-sm font-bold",
-              pkg.badge === "EKSCLUSIF" &&
-                "bg-yellow-400 text-black hover:bg-yellow-300",
-              pkg.badge === "REKOMENDASI" && "bg-orange-600 hover:bg-orange-500",
-              !pkg.badge && ""
-            )}
-            onClick={pkg.onJoin}
-          >
-            Gabung Sekarang
-          </Button>
-        </div>
-      ))}
+        className={cn(
+          "w-full text-2xl font-bold mt-auto py-6 mt-10",
+          pkg.badge === "EKSCLUSIF" &&
+            "bg-yellow-400 text-black hover:bg-yellow-300",
+          pkg.badge === "REKOMENDASI" && "bg-orange-600 hover:bg-orange-500"
+        )}
+        onClick={pkg.onJoin}
+      >
+        Gabung Sekarang
+      </Button>
       </div>
+
+    
+    </div>
+  ))}
+</div>
     </div>
   );
 }

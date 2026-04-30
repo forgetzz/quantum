@@ -10,25 +10,17 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import Certificate from "./Certifikat";
 interface datas {
   name: string;
   email: string;
   username: string;
-  bonus: number;
-  bonusRO: number;
-  Pin: string[];
-  Pin_RO: string[];
+
 }
-interface datasRef {
-  bonus: number;
-  bonusRO: number;
-}
+
 export default function Home2() {
   const [profile, setProfile] = useState<datas>();
-  const [jumlahAnak, setJumlahAnak] = useState<number>(0);
-  const [jumlahMitra, setJumlahMitra] = useState(0);
-  const [jumlahRo, setJumlahRo] = useState(0);
-  const [jumlahBonus, setJumlahBonus] = useState(0);
+
 
   useEffect(() => {
     const unsub = onAuthStateChanged(getAuth(), async (user) => {
@@ -48,47 +40,47 @@ export default function Home2() {
     return () => unsub();
   }, []);
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(getAuth(), async (user) => {
-      if (user) {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
+//   useEffect(() => {
+//     const unsub = onAuthStateChanged(getAuth(), async (user) => {
+//       if (user) {
+//         const userRef = doc(db, "users", user.uid);
+//         const userSnap = await getDoc(userRef);
 
-        if (userSnap.exists()) {
-          const userData = userSnap.data();
-          const username = userData.username;
+//         if (userSnap.exists()) {
+//           const userData = userSnap.data();
+//           const username = userData.username;
 
-          const q = query(
-            collection(db, "users"),
-            where("sponsorUsername", "==", username)
-          );
-          const querySnapshot = await getDocs(q);
-          const b = query(
-            collection(db, "users"),
-            where("sponsorUsername", "==", username),
-            where("roStatus", "==", true)
-          );
-          const querydata = await getDocs(b);
-          setJumlahMitra(querydata.size);
-          // Simpan jumlah anak ke state
-          setJumlahAnak(querySnapshot.size); // .size langsung ambil jumlah dokumen
-          setJumlahRo(querydata.size);
+//           const q = query(
+//             collection(db, "users"),
+//             where("sponsorUsername", "==", username)
+//           );
+//           const querySnapshot = await getDocs(q);
+//           const b = query(
+//             collection(db, "users"),
+//             where("sponsorUsername", "==", username),
+//             where("roStatus", "==", true)
+//           );
+//           const querydata = await getDocs(b);
+//           setJumlahMitra(querydata.size);
+//           // Simpan jumlah anak ke state
+//           setJumlahAnak(querySnapshot.size); // .size langsung ambil jumlah dokumen
+//           setJumlahRo(querydata.size);
 
-          const dataBonusRef = doc(db, "users", user.uid);
-          const dataBonus = await getDoc(dataBonusRef);
-          if (dataBonus.exists()) {
-            const datas = dataBonus.data() as datasRef;
-            const result = datas.bonus + datas.bonusRO;
-            setJumlahBonus(result);
-          }
-        } else {
-          console.error("erorr");
-        }
-      }
-    });
+//           const dataBonusRef = doc(db, "users", user.uid);
+//           const dataBonus = await getDoc(dataBonusRef);
+//           if (dataBonus.exists()) {
+//             const datas = dataBonus.data() as datasRef;
+//             const result = datas.bonus + datas.bonusRO;
+//             setJumlahBonus(result);
+//           }
+//         } else {
+// console.error("erorr")
+//         }
+//       }
+//     });
 
-    return () => unsub();
-  }, []);
+//     return () => unsub();
+//   }, []);
 
   return (
     <div className="p-6 space-y-6 text-gray-800 mb-36 ">
@@ -101,73 +93,23 @@ export default function Home2() {
       </div>
 
       {/* Total Mitra */}
-      <div className="bg-white p-6 rounded-xl shadow flex flex-col items-center text-center">
-        <div className="bg-blue-500 p-4 rounded-full mb-4">
+      <div className=" certificate  p-6 rounded-xl shadow flex flex-col items-center text-center">
+        {/* <div className="bg-blue-500 p-4 rounded-full mb-4">
           <Users className="w-10 h-10 text-white" />
         </div>
         <h2 className="text-base font-semibold">Total Referensi</h2>
         <p className="text-4xl font-bold mt-1">{jumlahAnak}</p>
         <p className="text-sm text-gray-500 mt-1">
           Jumlah Referensi di jaringan Anda
-        </p>
-      </div>
-
-      {/* Statistik */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <CardStat
-          judul="Mitra Aktivasi"
-          angka={`${jumlahMitra}`}
-          keterangan="Mitra dengan status aktif"
-        />
-        <CardStat
-          judul="Mitra RO"
-          angka={`${jumlahRo}`}
-          keterangan="Mitra yang sudah melakukan RO"
-        />
-        <CardStat
-          judul="Omset Aktivasi"
-          angka={`Rp ${profile?.bonus?.toLocaleString("id-ID")}`}
-          keterangan="Total omset dari pendaftaran"
-        />
-        <CardStat
-          judul="Omset RO"
-          angka={`Rp ${
-            profile?.bonusRO ? profile.bonusRO.toLocaleString("id-ID") : 0
-          }`}
-          keterangan="Total omset dari RO tim"
-        />
-      </div>
-
-      {/* Rincian Bonus */}
-      <div>
-        <h2 className="text-xl font-bold mb-3">Rincian Total Bonus</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <CardStat
-            judul="Total Bonus Referal"
-            angka={`Rp ${
-              profile?.bonus ? profile.bonus.toLocaleString("id-ID") : "0"
-            }`}
-            keterangan="Dari pendaftaran mitra baru"
-          />
-          <CardStat
-            judul="Total Bonus RO"
-            angka={`Rp ${
-              profile?.bonusRO ? profile.bonusRO.toLocaleString("id-ID") : 0
-            }`}
-            keterangan="Dari repeat order tim"
-          />
-          <CardStat
-            judul="Bonus Reward Utama"
-            angka="Rp 0"
-            keterangan="Pencapaian reward utama"
-          />
-          <CardStat
-            judul="Bonus Reward Peringkat"
-            angka="Rp 0"
-            keterangan="Pencapaian peringkat"
-          />
+        </p> */}
+        <div className="sertifikat">
+         <Certificate name={String(profile?.username)}/>
         </div>
+        <h1 className="h1">Lihat Sertifikat di window desktop</h1>
       </div>
+
+  
+  
     </div>
   );
 }
