@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import PinProducer from "@/components/pin";
-import PinRO from "@/components/UserComponents/RoPIN";
+
 type BeliPinData = {
   id: string;
   uid: string;
@@ -362,10 +362,7 @@ export default function AdminPage() {
           <h2 className="text-2xl font-semibold mb-4">Generate PIN Aktivasi</h2>
           <PinProducer />
         </section>
-        <section className="bg-white p-6 rounded-xl shadow text-gray-800">
-          <h2 className="text-2xl font-semibold mb-4">🔐 Generate PIN RO</h2>
-          <PinRO />
-        </section>
+     
       </div>
     </div>
   );
