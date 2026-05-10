@@ -1,36 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { db } from "@/lib/firebase";
 import { useRouter } from "next/navigation";
-import Link from "next/link"; // Import Link untuk navigasi ke halaman login
+import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
-interface FormData {
-  name: string;
-  email: string;
-  password: string;
-  sponsorUsername: string;
-  whatsapp: string;
-  bank: string;
-  username: string;
-  rekening: string;
-}
-
-interface PinType {
-  Pin: string;
-  used: boolean;
-}
+import { doc, getDoc } from "firebase/firestore";
+import { Register } from "@/service/register";
+import { registerType } from "@/Types/register";
+import { useAuth } from "@/hooks/useUser";
 
 export default function MitraRegisterPage() {
-  const db2 = db;
   const router = useRouter();
-  const [loading, setLoading] = useState(false); // State untuk loading
-  const [error, setError] = useState<string | null>(null); // State untuk pesan error
-  const [success, setSuccess] = useState<string | null>(null); // State untuk pesan sukses
-    const [lihatPassword, setLihatPassword] = useState(false); // toggle password
-  const [form, setForm] = useState<FormData>({
+  const { user } = useAuth()
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [lihatPassword, setLihatPassword] = useState(false);
+  const [form, setForm] = useState<registerType>({
     name: "",
     email: "",
     password: "",
@@ -39,6 +28,7 @@ export default function MitraRegisterPage() {
     bank: "",
     username: "",
     rekening: "",
+    addressEVM: "",
   });
 
   const handleChange = (
@@ -46,40 +36,11 @@ export default function MitraRegisterPage() {
   ) => {
     const { name, value } = e.target;
     if (name === "sponsorUsername") {
-      // const sponsors = value.split(",").map((id) => id.trim());
       setForm({ ...form, sponsorUsername: value });
     } else {
       setForm({ ...form, [name]: value });
     }
   };
-
-  // Fungsi ini dipindahkan atau disesuaikan jika validasi PIN dilakukan di backend
-  // Untuk saat ini, kita fokus ke UI dan proses register secara umum.
-  // const verifyAndMarkPinUsed = async (sponsorUid: string, inputPin: string) => {
-  //   const sponsorRef = doc(db2, 'users', sponsorUid);
-  //   const sponsorSnap = await getDoc(sponsorRef);
-
-  //   if (!sponsorSnap.exists()) {
-  //     throw new Error('Sponsor tidak ditemukan');
-  //   }
-
-  //   const sponsorData = sponsorSnap.data();
-  //   const pins = sponsorData.pins || [];
-
-  //   const pinIndex = pins.findIndex(
-  //     (pin: PinType) => pin.Pin === inputPin && !pin.used
-  //   );
-
-  //   if (pinIndex === -1) {
-  //     throw new Error('PIN tidak valid atau sudah digunakan');
-  //   }
-
-  //   // Tandai pin sebagai sudah digunakan
-  //   pins[pinIndex].used = true;
-  //   await updateDoc(sponsorRef, { pins });
-
-  //   return true;
-  // };
 
   const handleRegister = async () => {
     setLoading(true);
@@ -87,77 +48,23 @@ export default function MitraRegisterPage() {
     setSuccess(null);
 
     try {
-      // 1️⃣ Kirim data ke backend untuk validasi
-      const validateResponse = await fetch(
-        "https://backend-asb-production.up.railway.app/validate-register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: form.name,
-            username: form.username,
-            email: form.email,
-            sponsorUsername: form.sponsorUsername,
-            bank: form.bank,
-            rekening: form.rekening,
-            whatsapp: form.whatsapp,
-          }),
-        }
-      );
-
-      const validationData = await validateResponse.json();
-
-      if (!validateResponse.ok) {
-        setError(validationData.message || "Validasi gagal.");
-        return;
+      const data = {
+        name: form.name,
+        username: form.username,
+        email: form.email,
+        sponsorUsername: user?.username,
+        bank: form.bank,
+        password: form.password,
+        rekening: form.rekening,
+        whatsapp: form.whatsapp,
+        addressEVM: form.addressEVM,
       }
-
-
-      const authInstance = getAuth();
-      const userCredential = await createUserWithEmailAndPassword(
-        authInstance,
-        form.email,
-        form.password
-      );
-
-      const user = userCredential.user;
-      const token = await user.getIdToken();
-
-   
-      const saveResponse = await fetch(
-        "https://backend-asb-production.up.railway.app/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            uid: user.uid,
-            name: form.name,
-            username: form.username,
-            email: form.email,
-            sponsorUsername: form.sponsorUsername,
-            bank: form.bank,
-            rekening: form.rekening,
-            whatsapp: form.whatsapp,
-          }),
-        }
-      );
-
-      const saveData = await saveResponse.json();
-
-      if (!saveResponse.ok) {
-        setError(saveData.message || "Gagal menyimpan data.");
-        return;
-      }
+     await Register(data)
 
       setSuccess("Registrasi berhasil! Anda akan diarahkan ke halaman login.");
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
+      // setTimeout(() => {
+      //   router.replace("/Payment");
+      // }, 2000);
     } catch (error: unknown) {
       console.error("❌ Error:", error);
       setError("Terjadi kesalahan saat proses registrasi.");
@@ -165,6 +72,10 @@ export default function MitraRegisterPage() {
       setLoading(false);
     }
   };
+
+
+
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-white to-gray-500">
@@ -252,7 +163,7 @@ export default function MitraRegisterPage() {
             id="whatsapp"
             className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="whatsapp"
-            type="numeric"
+            type="number"
             placeholder="0896364730"
             onChange={handleChange}
             value={form.whatsapp}
@@ -261,7 +172,7 @@ export default function MitraRegisterPage() {
         </div>
 
         {/* Input Password */}
-        <div className="relative w-full "> 
+        <div className="relative w-full ">
           <label
             htmlFor="password"
             className="block text-gray-700 text-sm font-semibold mb-2"
@@ -269,25 +180,25 @@ export default function MitraRegisterPage() {
             Password
           </label>
           <div>
-          <input
-            id="password"
-            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
-            name="password"
-            type={lihatPassword ? "text" : "password"}
-            placeholder="Minimal 6 karakter"
-            onChange={handleChange}
-            value={form.password}
-            aria-label="Password"
-          />
+            <input
+              id="password"
+              className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+              name="password"
+              type={lihatPassword ? "text" : "password"}
+              placeholder="Minimal 6 karakter"
+              onChange={handleChange}
+              value={form.password}
+              aria-label="Password"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={() => setLihatPassword(!lihatPassword)}
+            className="absolute right-4 top-11 mt-2 -translate-y-1/2 text-gray-500"
+          >
+            {lihatPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
         </div>
-    <button
-        type="button"
-        onClick={() => setLihatPassword(!lihatPassword)}
-        className="absolute right-4 top-11 mt-2 -translate-y-1/2 text-gray-500"
-      >
-        {lihatPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-      </button>
-      </div>
         {/* input bank */}
         <div>
           <label className="block mb-1 font-medium">Bank</label>
@@ -325,6 +236,25 @@ export default function MitraRegisterPage() {
             aria-label="Nomor Rekening"
           />
         </div>
+        {/* address EVM */}
+        <div>
+          <label
+            htmlFor="addressEVM"
+            className="block text-gray-700 text-sm font-semibold mb-2"
+          >
+            address EVM
+          </label>
+          <input
+            id="addressEVM"
+            className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
+            name="addressEVM"
+            placeholder="Contoh: 0x0973ycttedta"
+            onChange={handleChange}
+            value={form.addressEVM}
+            aria-label="addressEVM"
+
+          />
+        </div>
 
         {/* Input Sponsor ID */}
         <div>
@@ -332,19 +262,19 @@ export default function MitraRegisterPage() {
             htmlFor="sponsorUsername"
             className="block text-gray-700 text-sm font-semibold mb-2"
           >
-            Username Sponsor
+            Username Referal
           </label>
           <input
-            id="sponsorUsername"
+            type="readonly"
             className="w-full px-5 py-3 rounded-lg border-2 border-gray-300 focus:border-orange-500 focus:ring-1 focus:ring-orange-500 outline-none transition-all duration-200 bg-white text-gray-900 placeholder-gray-400"
             name="sponsorUsername"
-            placeholder="Jika ada, pisahkan dengan koma jika lebih dari satu"
-            onChange={handleChange}
-            value={form.sponsorUsername} // Tampilkan array sebagai string di input
+            placeholder={`${user?.username}`}
+            disabled
+            value={user?.username} // Tampilkan array sebagai string di input
             aria-label="ID Sponsor"
           />
           <p className="text-xs text-gray-500 mt-1">
-            Masukkan Username unik sponsor Anda, jika berlaku.
+            Masukkan Username unik Referal Anda, jika berlaku.
           </p>
         </div>
 

@@ -1,34 +1,35 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
+import { ModuleType } from "@/Types/ModuleTypes";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { fetchData } from "@/service/Fetchdata";
 
-type ModuleType = {
-  id: string;
-  title: string;
-  description: string;
-  fileUrl: string;
-  thumbnail?: string;
-};
 
 export default function Module() {
   const [modules, setModules] = useState<ModuleType[]>([]);
+  const [loading, setLoading] = useState(true)
+
 
   useEffect(() => {
     const fetchModules = async () => {
-      const snap = await getDocs(collection(db, "Module"));
-      const data = snap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as ModuleType[];
-
-      setModules(data);
-    };
-
+      try {
+        const result = await fetchData<ModuleType>("Module")
+        setModules(result)
+      } catch {
+        console.log("error")
+      } finally {
+        setLoading(false)
+      }
+    }
     fetchModules();
   }, []);
+
+
+  if (loading) {
+    return <h1>Loading data.....</h1>
+  }
 
   return (
     <div className="p-6">
@@ -70,15 +71,15 @@ export default function Module() {
               </p>
 
               {/* Action */}
-       <button
-  onClick={() => {
-    const viewer = `https://docs.google.com/gview?url=${mod.fileUrl}&embedded=true`;
-    window.open(viewer, "_blank");
-  }}
-  className="inline-block mt-4 text-sm bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
->
-  Lihat Materi
-</button>
+              <button
+                onClick={() => {
+                  const viewer = `https://docs.google.com/gview?url=${mod.fileUrl}&embedded=true`;
+                  window.open(viewer, "_blank");
+                }}
+                className="inline-block mt-4 text-sm bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition"
+              >
+                Lihat Materi
+              </button>
             </div>
           </div>
         ))}

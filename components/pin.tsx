@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 
-const ADMIN_EMAILS = ["admin1@gmail.com", "admin2@gmail.com"];
+const ADMIN_EMAILS = ["admin@quantum.com", "admin2@gmail.com"];
 
 export default function PinProducer() {
   const db = getFirestore();

@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/hooks/useUser";
 import React from "react";
 
 type CertificateProps = {
@@ -10,19 +11,22 @@ type CertificateProps = {
   issuer?: string;
 };
 
-const Certificate: React.FC<CertificateProps> = ({
+const CertificateDefi: React.FC<CertificateProps> = ({
   name,
-  title = "SERTIFIKAT PENGHARGAAN",
+  title = "SERTIFIKAT DEFI",
   description = "Diberikan kepada",
   date = "01 Januari 2026",
   issuer = "Quantum Bootcamp",
 }) => {
+  const { user } = useAuth()
+
   return (
     <div className="flex justify-center items-center">
-      <div className="w-[500px] h-[320px] bg-white border-[6px] border-gray-900 shadow-2xl relative p-4">
+      <div className={`w-[500px] h-[320px] bg-white border-[6px] border-gray-900 shadow-2xl relative p-4${user?.defi ? "" : "pointer-events-none opacity-10"
+        }`}>
 
         {/* Border dalam */}
-        <div className="border-2 border-yellow-500 w-full h-full text-center relative p-3">
+        <div className="border-2 border-green-500 w-full h-full text-center relative p-3">
 
           {/* Logo */}
           <div className="absolute top-3 left-3">
@@ -35,7 +39,7 @@ const Certificate: React.FC<CertificateProps> = ({
           </h1>
 
           {/* Garis */}
-          <div className="w-20 h-[2px] bg-yellow-500 mx-auto my-2"></div>
+          <div className="w-20 h-[2px] bg-green-500 mx-auto my-2"></div>
 
           <p className="text-[10px] text-gray-500">
             {description}
@@ -61,7 +65,7 @@ const Certificate: React.FC<CertificateProps> = ({
             </div>
 
             <div className="text-center">
-              
+
               <div className="w-[100px] border-t mt-6"></div>
               <p className="mt-1">Penerima</p>
             </div>
@@ -83,4 +87,4 @@ const Certificate: React.FC<CertificateProps> = ({
   );
 };
 
-export default Certificate;
+export default CertificateDefi;

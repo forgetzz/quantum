@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./global.css";
 import GlobalLoading from "@/components/loadingPage";
+import { AuthContextProvider } from "@/Context/authContex";
+import { ThemeContextProvider } from "@/Context/ThemeContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Quantum Bootcamp",
   description: "sehat bersama",
-    icons: {
+  icons: {
     icon: "/images/loadinag.png", // atau /favicon.png
   },
 };
@@ -28,16 +30,20 @@ export default function RootLayout({
 }>) {
   return (
     <html>
-  <head>
+      <head>
         {/* Favicon manual */}
         <link rel="icon" href="/images/loading.png" type="image/png" />
         <title>Quantum Bootcamp</title>
       </head>
+      <AuthContextProvider>
+        <ThemeContextProvider>
+          <body className="bg-base-100 text-base-content min-h-screen">
+            <GlobalLoading />
+            {children}
+          </body>
+        </ThemeContextProvider>
+      </AuthContextProvider>
 
-      <body className="bg-base-100 text-base-content min-h-screen">
-   <GlobalLoading/>
-        {children}
-      </body>
     </html>
   );
 }

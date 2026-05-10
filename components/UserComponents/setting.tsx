@@ -6,6 +6,7 @@ import { auth, db } from "@/lib/firebase";
 import { Camera, Key, Pencil, Save, X } from "lucide-react";
 import { signOut } from "firebase/auth";
 import { Label } from "@radix-ui/react-dropdown-menu";
+import { json } from "stream/consumers";
 
 const SUPABASE_PROJECT_URL = "https://yredbkgnngcgzfagnwah.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlyZWRia2dubmdjZ3pmYWdud2FoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTA4MDU2NjEsImV4cCI6MjA2NjM4MTY2MX0.72ogqDzn1QPTqiYkhbb4PLe7PRpZcFmzqJ9IL6203Fs"; // Pindahkan ini ke env jika production
@@ -41,6 +42,8 @@ export default function ProfilePage() {
     const fetchUserData = async () => {
       const user = auth.currentUser;
       if (!user) return;
+
+      console.log(await user.getIdToken(), "ini data")
 
       const userDoc = await getDoc(doc(db, "users", user.uid));
       if (userDoc.exists()) {
@@ -116,13 +119,43 @@ export default function ProfilePage() {
   const handleSave = async () => {
     const user = auth.currentUser;
     if (!user) return;
+    const token = await user.getIdToken()
+    const cleanData = {
+      name: formData.name,
+      email: formData.email,
+      bank: formData.bank,
+      rekening: formData.rekening,
+      whatsapp: formData.whatsapp,
+      imageProfile: formData.imageProfile,
+      addressEVM: formData.addressEVM,
+    };
 
-    await setDoc(doc(db, "users", user.uid), formData, { merge: true });
+    try {
+      const res = await fetch("http://localhost:5000/update/update2", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(cleanData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "request gagal");
+      }
+
+      console.log("SUCCESS:", data);
+    } catch (err: any) {
+      console.log("ERROR:", err.message);
+    }
+    // await setDoc(doc(db, "users", user.uid), formData, { merge: true });
     setUserData(formData);
     setIsEditing(false);
   };
 
-  const triggerFileInput = () => fileInputRef.current?.click();
+
 
   return (
     <div className="min-h-screen bg-gray-100 py-10 px-4 sm:px-8 lg:px-16 mb-10">
@@ -159,7 +192,7 @@ export default function ProfilePage() {
             { label: "Bank", key: "bank" },
             { label: "No Rekening", key: "rekening" },
             { label: "Nomor WhatsApp", key: "whatsapp" },
-            { label: "address", Key: "addressEVM" },
+            { label: "addressEVM", key: "addressEVM" },
           ].map((field, k) => (
             <div key={k}>
               <span className="font-semibold">{field.label}:</span>{" "}

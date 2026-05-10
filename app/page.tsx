@@ -3,7 +3,7 @@ import HeroSection from "@/components/hero";
 import { SokidList } from "@/components/kemitraan"; // Assuming this is correct
 import Navbar from "@/components/navbar";
 import Pengguna from "@/components/pengguna";
-import ProductCards from "@/components/produk";
+
 import SejarahKami from "@/components/sejarahKami";
 
 export default function Home() {
