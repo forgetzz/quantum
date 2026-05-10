@@ -3,9 +3,9 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
-import "dotenv"
+
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_GOOGLE_API,
+  apiKey: 'AIzaSyAujOFItxhfQgn0awo2mCpcRJ1MrQ1ok50',
   authDomain: "bootcamp-b226f.firebaseapp.com",
   projectId: "bootcamp-b226f",
   storageBucket: "bootcamp-b226f.firebasestorage.app",
