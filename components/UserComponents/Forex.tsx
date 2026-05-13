@@ -8,7 +8,7 @@ export default function Forex() {
 
 
   return (
-    <div className={`min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-gray-100 to-gray-900 text-black px-6 ${user?.trade ? " " : " cursor-not-allowed  opacity-30"} `}>
+    <div className={`min-h-screen flex items-center justify-center bg-gradient-to-br from-white via-gray-100 to-gray-900 text-black px-6 ${user?.TaskTrade === 5 ? " " : " cursor-not-allowed  opacity-30"} `}>
       <div className="max-w-xl text-center space-y-6">
         <h1 className="text-4xl font-bold">
           Trading Challenge $5000
@@ -28,7 +28,7 @@ export default function Forex() {
 
         <button
           onClick={() => alert("Data kamu sedang diproses")}
-          className={`px-6 py-3 bg-orange-500 hover:bg-orange-600 transition rounded-xl font-semibold shadow-lg ${user?.trade ? "   " : "pointer-events-none"} `}
+          className={`px-6 py-3 bg-orange-500 hover:bg-orange-600 transition rounded-xl font-semibold shadow-lg ${user?.TaskTrade === 5 ? "   " : "pointer-events-none"} `}
         >
           Saya ingin ikut tes
         </button>

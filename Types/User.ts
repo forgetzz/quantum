@@ -1,5 +1,7 @@
 export interface User {
   name: string
+  TaskDefi: number
+  TaskTrade: number
   username: string
   email: string
   addressEVM: string

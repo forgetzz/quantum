@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactHTMLElement, useEffect, useState } from "react";
 
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import {
-
   doc,
   getDoc,
-
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import Certificate from "./TradeCertifikat";
-import CertificateDefi from "./DefiCertifikat";
 import SertifikatSection from "./Slider";
+import { Star } from "lucide-react";
 interface datas {
   name: string;
   email: string;
   username: string;
+  TaskDefi:number
+  TaskTrade: number
 
 }
 
 export default function Home2() {
   const [profile, setProfile] = useState<datas>();
-
+const trade = Number(profile?.TaskTrade)
 
   useEffect(() => {
     const unsub = onAuthStateChanged(getAuth(), async (user) => {
@@ -40,48 +39,12 @@ export default function Home2() {
     return () => unsub();
   }, []);
 
-  //   useEffect(() => {
-  //     const unsub = onAuthStateChanged(getAuth(), async (user) => {
-  //       if (user) {
-  //         const userRef = doc(db, "users", user.uid);
-  //         const userSnap = await getDoc(userRef);
 
-  //         if (userSnap.exists()) {
-  //           const userData = userSnap.data();
-  //           const username = userData.username;
-
-  //           const q = query(
-  //             collection(db, "users"),
-  //             where("sponsorUsername", "==", username)
-  //           );
-  //           const querySnapshot = await getDocs(q);
-  //           const b = query(
-  //             collection(db, "users"),
-  //             where("sponsorUsername", "==", username),
-  //             where("roStatus", "==", true)
-  //           );
-  //           const querydata = await getDocs(b);
-  //           setJumlahMitra(querydata.size);
-  //           // Simpan jumlah anak ke state
-  //           setJumlahAnak(querySnapshot.size); // .size langsung ambil jumlah dokumen
-  //           setJumlahRo(querydata.size);
-
-  //           const dataBonusRef = doc(db, "users", user.uid);
-  //           const dataBonus = await getDoc(dataBonusRef);
-  //           if (dataBonus.exists()) {
-  //             const datas = dataBonus.data() as datasRef;
-  //             const result = datas.bonus + datas.bonusRO;
-  //             setJumlahBonus(result);
-  //           }
-  //         } else {
-  // console.error("erorr")
-  //         }
-  //       }
-  //     });
-
-  //     return () => unsub();
-  //   }, []);
-
+  const star = (rating: number) => {
+    return Array.from({ length: rating }).map((_, i) => (
+      <Star className="text-yellow-500 flex" key={i} />
+    ));
+  };
   return (
     <div className="p-6 space-y-6 text-gray-800 mb-36 ">
       {/* Header */}
@@ -90,6 +53,7 @@ export default function Home2() {
         <p className="text-sm text-gray-600">
           Ini adalah ringkasan aktivitas dan pencapaian Anda.
         </p>
+        <div></div>
       </div>
 
       {/* Total Mitra */}
@@ -108,9 +72,17 @@ export default function Home2() {
         <h1 className="h1">Lihat Sertifikat di window desktop</h1>
       </div>
 
-      {/* <div>
-        <CardStat judul="akun" angka="1" keterangan="aktif" />
-      </div> */}
+      <div>
+        <CardStat judul="Trade Task" angka={star(trade)} keterangan="aktif" />
+      </div>
+
+      <div className="">
+        <CardStat judul="Defi Task" angka={star(Number(profile?.TaskDefi))} keterangan="aktif" />
+      </div>
+
+      {/* <div className="flex justify-center">
+      <Level/>
+    </div> */}
 
     </div>
   );
@@ -123,14 +95,13 @@ function CardStat({
   keterangan,
 }: {
   judul: string;
-  angka: string;
+  angka: React.ReactNode;
   keterangan: string;
 }) {
   return (
-    <div className="bg-white p-5 rounded-xl shadow">
-      <p className="text-sm font-medium">{judul}</p>
-      <p className="text-2xl font-bold text-black mt-1">{angka}</p>
-      <p className="text-sm text-gray-500">{keterangan}</p>
+    <div className="bg-white p-5 rounded-xl shadow flex flex-col gap-5">
+      <p className="text-3xl font-medium">{judul}</p>
+      <p className="text-2xl font-bold text-black mt-1 flex gap-4">{angka}</p>
     </div>
   );
 }

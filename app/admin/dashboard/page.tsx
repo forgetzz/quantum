@@ -6,6 +6,8 @@ import {
 
   doc,
 
+  increment,
+
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
@@ -15,10 +17,14 @@ import { fetchData } from "@/service/Fetchdata";
 import useTheme from "@/hooks/useTheme";
 import { Colors } from "@/utils/Colors";
 import { Moon, Sun, ThermometerIcon } from "lucide-react";
+import { useAuth } from "@/hooks/useUser";
+import AddModule from "@/components/layoutComponents/addModule";
+import NavbarAdmin from "@/components/layoutComponents/NavbarAdmin";
 
 
 export default function AdminPage() {
-  const [user, setUser] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
+  const { user } = useAuth()
   const router = useRouter();
   const [alert, setAlert] = useState(false)
   const { isDark, ThemeToggle } = useTheme()
@@ -27,14 +33,9 @@ export default function AdminPage() {
   const theme = isDark ? Colors.Primary_BG : Colors.Secondary_BG
 
   const fetchDatas = async () => {
-    // const userSnap = await getDocs(collection(db, "users"));
-    // const data = userSnap.docs.map((doc) => ({
-    //   id: doc.id,
-    //   ...doc.data() as User
-    // }))
 
     const data = await fetchData<User>("users")
-    setUser(data);
+    setUsers(data);
   };
 
 
@@ -77,7 +78,55 @@ export default function AdminPage() {
   };
 
 
+  if (user?.email != "admin@quantum.com ") {
+    // return router.replace("/admin/login")
+  }
 
+  const updateTaskDefi = async (
+    uid: string,
+    value: number
+  ) => {
+
+    try {
+
+      await updateDoc(
+        doc(db, "users", uid),
+        {
+          TaskDefi: increment(value),
+        }
+      );
+
+      fetchDatas();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
+
+  const updateTaskTrade = async (
+    uid: string,
+    value: number
+  ) => {
+
+    try {
+
+      await updateDoc(
+        doc(db, "users", uid),
+        {
+          TaskTrade: increment(value),
+        }
+      );
+
+      fetchDatas();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+  };
 
 
   return (
@@ -91,6 +140,7 @@ export default function AdminPage() {
           <h1 className="text-3xl font-bold text-orange-600">
             🛠 Admin Panel - Quantum Bootcamp
           </h1>
+
           <button
             onClick={handleLogout}
             className="bg-orange-500 px-4 py-2 rounded hover:bg-gray-400"
@@ -107,21 +157,23 @@ export default function AdminPage() {
               <thead className="">
                 <tr>
 
-                  <th className="p-2 text-sm">Name</th>
+
                   <th className="p-2 text-sm">Username</th>
                   <th className="p-2 text-sm">Email</th>
                   <th className="p-2 text-sm">addressEVM</th>
                   <th className="p-2 text-sm">Rekening</th>
                   <th className="p-2 text-sm">Whatsap</th>
+                  <th className="p-2 text-sm">Defi Task</th>
+                  <th className="p-2 text-sm">Trade Task</th>
                   <th className="p-2 text-sm">Defi Activasi</th>
                   <th className="p-2 text-sm">trade Activasi</th>
                 </tr>
               </thead>
               <tbody>
-                {user.map((user, i) => (
+                {users.map((user, i) => (
                   <tr key={i} className="border-t hover:border-orange-500">
 
-                    <td className="p-3">{user.name}</td>
+
                     <td className="p-3">{user.username}</td>
                     <td className="p-3">{user.email}</td>
                     <td className="p-3">
@@ -130,6 +182,88 @@ export default function AdminPage() {
                     </td>
                     <td className="p-3">{user.rekening}</td>
                     <td className="p-3">{user.whatsapp}</td>
+                    <td className="p-3">
+
+                      <div className="flex items-center gap-2">
+                        {/* minus */}
+                        <button
+                          onClick={() =>
+                            updateTaskDefi(user.uid, -1)
+                          }
+                          className="
+        w-8
+        h-8
+        rounded-lg
+        bg-red-500
+        text-white
+      "
+                        >
+                          -
+                        </button>
+
+                        {/* total */}
+                        <span className="min-w-[30px] text-center">
+                          {user.TaskDefi}
+                        </span>
+
+                        {/* plus */}
+                        <button
+                          onClick={() =>
+                            updateTaskDefi(user.uid, 1)
+                          }
+                          className="
+        w-8
+        h-8
+        rounded-lg
+        bg-green-500
+        text-white
+      "
+                        >
+                          +
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                    <td className="p-3">
+
+                      <div className="flex items-center gap-2">
+
+                        {/* minus */}
+                        <button
+                          onClick={() =>
+                            updateTaskTrade(user.uid, -1)
+                          }
+                          className="
+        w-8
+        h-8
+        rounded-lg
+        bg-red-500
+        text-white
+      "
+                        >
+                          -
+                        </button>
+
+                        {/* total */}
+                        <span className="min-w-[30px] text-center">
+                          {user.TaskTrade}
+                        </span>
+
+                        {/* plus */}
+                        <button
+                          onClick={() =>
+                            updateTaskTrade(user.uid, 1)
+                          }
+                          className="w-8 h-8rounded-lg bg-green-500 text-white"
+                        >
+                          +
+                        </button>
+
+                      </div>
+
+                    </td>
 
 
                     <td> <button className="text-white" onClick={() => handleUpdate(user.uid)}>{user.defi ? <p className="bg-green-500 p-2 rounded-lg">Aktif</p> : <p className="bg-red-500 p-2 rounded-lg">NonAktif</p>}</button></td>
@@ -143,7 +277,6 @@ export default function AdminPage() {
             </table>
           </div>
         </section>
-
 
 
         <div className="fixed left-1/2 top-5 -translate-x-1/2 z-50">

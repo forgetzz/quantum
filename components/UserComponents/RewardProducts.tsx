@@ -6,6 +6,7 @@ import { fetchData } from "@/service/Fetchdata";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import GlobalLoading from "../loadingPage";
 
 
 
@@ -15,14 +16,16 @@ export default function RewardProducts() {
   const [claimedIds, setClaimedIds] = useState<string[]>([]);
   const [gift, setGift] = useState<ProductsGift[]>([])
   const [loading, setLoading] = useState(true)
-
-
+  
   useEffect(() => {
     async function getProducts() {
       try {
+        setLoading(true)
         const result = await fetchData<ProductsGift>("Gift");
-        console.log(result)
-        setGift(result);
+        const filer = result.filter(item => 
+          item.ProductTotal != 0
+        )
+        setGift(filer);
       } catch (error) {
         console.log(error);
       } finally {
@@ -34,6 +37,11 @@ export default function RewardProducts() {
   }, [])
 
 
+
+
+  if (loading) {
+    return <GlobalLoading/>
+  }
   // const handleClaim = async (id: string) => {
   //   if (!user) return
   //   if (profile?.gift) {
@@ -56,7 +64,7 @@ export default function RewardProducts() {
 
   return (
     <div className="p-6 mb-20 ">
-      <h1 className="text-2xl font-bold mb-6"> Reward Produk</h1>
+      <h1 className="text-2xl font-bold mb-6">Reward Produk</h1>
 
       <div
         className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 ${gift ? "pointer-events-none opacity-30" : ""

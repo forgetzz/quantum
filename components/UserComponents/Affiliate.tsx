@@ -1,17 +1,14 @@
 import { db } from '@/lib/firebase'
+import { fetchWhere } from '@/service/FetchWhere'
+import { AffiliateTypes } from '@/Types/Affiliate'
 import { getAuth } from 'firebase/auth'
-import { collection, doc, getDoc, getDocs, query, where, Timestamp } from 'firebase/firestore'
+import {  doc, getDoc,} from 'firebase/firestore'
 import { Key } from 'lucide-react'
 
 import React, { useEffect, useState } from 'react'
-interface dummy {
-  name: string
-  username: string
-  referal: string
-  createdAt: Timestamp
-}
+
 export default function Affiliate() {
-  const [user, setUser] = useState<dummy[]>([])
+  const [user, setUser] = useState<AffiliateTypes[]>([])
   const [username, setUsername] = useState("")
   const user2 = getAuth().currentUser
 
@@ -34,23 +31,20 @@ export default function Affiliate() {
 
 
   useEffect(() => {
-    const fetchAffiliate = async () => {
-      if (!username) return
-      console.log(username)
-      const snap = query(collection(db, "users"),
-        where("sponsorUsername", "==", username))
-      const datasnap = await getDocs(snap)
-      console.log(datasnap, "ini data snap")
-      const data = datasnap.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data() as dummy
-      }))
-      console.log(data)
+    const fetchData = async () => {
+      const data = await fetchWhere({
+        QueryData: username,
+        RefereceQuery: "sponsorUsername",
+        DbReference: "users"
+      })
+      if(!data) return
       setUser(data)
-
+      console.log(data, "ini duatas")
     }
+    fetchData()
 
-    fetchAffiliate()
+
+
   }, [username])
 
 
